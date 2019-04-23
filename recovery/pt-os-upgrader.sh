@@ -1,10 +1,10 @@
 #!/bin/sh
 
-####################################################
-# pi-topOS bootloader reflashing script
-####################################################
+#####################
+# pi-topOS Upgrader #
+#####################
 
-# pi-topOS bootloader common constants and functions
+# Common constants and functions
 
 export SD_CARD_DEVICE_P1="/dev/mmcblk0p1"
 export SD_CARD_DEVICE_P5="/dev/mmcblk0p5"
@@ -17,9 +17,22 @@ export SD_CARD_MOUNT_POINT_P6="/tmp/mmcblk0p6"
 export PT_BOOT_PARTITION_ID="5"
 
 export IMAGE_METADATA_FILENAME="metadata.txt"
-export OS_UPGRADE_INFO_FILENAME="pt-os-upgrader.info"
+export OS_UPGRADE_CONF_FILENAME="pt-os-upgrader.conf"
+
+export OS_UPGRADE_BREADCRUMB_FILENAME="upgrade-started"
 
 # Global variables to be detected
+
+##################################
+# Current version of this script #
+##################################
+LOADER_VERSION=1
+
+MIN_HUB_FW_VERSION_MAJOR=6
+MIN_HUB_FW_VERSION_MINOR=0
+
+# Can be overridden by OS_UPGRADE_CONF_FILENAME
+VERBOSE=0
 
 ZIP_FILE_PATH=""
 
@@ -38,6 +51,20 @@ print_title()
     echo -e "\033[1;33m[ ${1} ]\033[0m"
 }
 
+print_verbose_subtitle()
+{
+    if [ $VERBOSE -ne 0 ]; then
+        echo -e "\033[1;33m[ ${1} ]\033[0m"
+    fi
+}
+
+print_verbose_info()
+{
+    if [ $VERBOSE -ne 0 ]; then
+        echo "${1}"
+    fi
+}
+
 print_error()
 {
     echo -e "\033[0;31m${1}\033[0m"
@@ -45,7 +72,7 @@ print_error()
 
 reboot_system()
 {
-    echo "Rebooting..."
+    print_verbose_info "Rebooting..."
 
     /sbin/reboot -f
 }
@@ -69,7 +96,7 @@ mount_device()
 {
     # Mount a device to a new directory and log
 
-    echo "Mounting ${1} to ${2}..."
+    print_verbose_info "Mounting ${1} to ${2}..."
 
     create_empty_dir "${2}"
     mount "${1}" "${2}" 2>/dev/null
@@ -82,7 +109,7 @@ mount_device()
         delete_dir "${2}"
     else
 
-        echo "Device mounted"
+        print_verbose_info "Device mounted"
     fi
 }
 
@@ -95,10 +122,10 @@ unmount_device()
         umount -f "${1}"
         delete_dir "${mount_point}"
 
-        echo "Device unmounted"
+        print_verbose_info "Device unmounted"
     else
 
-        print_error "Warning: Device was not mounted"
+        print_error "Warning: attempted to unmount ${1}, but was not mounted"
     fi
 }
 
@@ -109,7 +136,7 @@ restore_autoboot_file()
     # the bootloader which partition to automatically boot into, so we set
     # this to 6 which is the boot partition of pi-topOS
 
-    echo "Restoring autoboot"
+    print_verbose_info "Restoring autoboot"
 
     local mount_point=$(findmnt -nr -o target -S "${SD_CARD_DEVICE_P1}")
 
@@ -121,18 +148,39 @@ restore_autoboot_file()
     echo "boot_partition=${PT_BOOT_PARTITION_ID}" > ${SD_CARD_MOUNT_POINT_P1}/autoboot.txt
 }
 
-error_return_to_os()
+error()
 {
-    # Something went wrong - reboot back into pi-topOS
+    echo
+    echo
+    print_error "Uh oh! An error has occurred:"
+    print_error "${1}"
+    echo
+    echo "If you continue to experience errors, try running pi-topOS Upgrader in debug mode."
+    echo "You can do this by connecting your SD card to another computer, and setting 'VERBOSE=1' in pt-os-upgrader.conf."
+    echo "Alternatively, you can contact support@pi-top.com for assistance. If possible, please provide all information provided in debug mode."
+    echo
 
-    echo "An error occurred. Press any key to attempt to reboot into pi-topOS, or r to retry"
 
-    read -r -n1 key_press
+    if [ -e "${SD_CARD_MOUNT_POINT_P1}/${OS_UPGRADE_BREADCRUMB_FILENAME}" ]; then
 
-    if [ "${key_press}" != "r" ]; then
+        print_error "NOTE: potential corrupted OS installation detected - please retry."
+        print_error "If you are unable to install pi-topOS using pi-topOS Upgrader, \
+please install pi-topOS onto your SD card using another computer."
 
-        restore_autoboot_file
+        echo "Press any key to retry."
 
+        read -r -n1 key_press
+
+    else
+
+        echo "Press any key to attempt to reboot into pi-topOS, or 'r' to retry."
+
+        read -r -n1 key_press
+
+        if [ "${key_press}" != "r" ]; then
+
+            restore_autoboot_file
+        fi
     fi
 
     reboot_system
@@ -149,10 +197,10 @@ find_image()
 
         print_error "No external storage devices found"
 
-        error_return_to_os
+        error
     fi
 
-    for external_device in $(find /dev/sd*); do
+    for external_device in $(find /dev/sd[a-z]?*); do
 
         local device_name=$(basename "${external_device}")
         local external_device_mount_point="/tmp/dev/${device_name}"
@@ -161,27 +209,27 @@ find_image()
 
         if [ -d "${external_device_mount_point}" ]; then
 
-            echo "Mounted storage device ${external_device_mount_point}. Checking for zipped image..."
+            print_verbose_info "Mounted storage device ${external_device_mount_point}. Checking for zipped image..."
 
             for temp_zip_file_path in $(find "${external_device_mount_point}"/ -maxdepth 1 -type f -name '*.zip'); do
 
                 if [ -f "${temp_zip_file_path}" ]; then
 
-                    echo "Found zip file on storage device: ${temp_zip_file_path}"
+                    print_verbose_info "Found zip file on storage device: ${temp_zip_file_path}"
 
-                    echo "Checking for image file in zip..."
+                    print_verbose_info "Checking for image file in zip..."
 
                     if [ $(7z l -ba -slt "${temp_zip_file_path}" | grep 'Path =' | grep -c '.img') -ne 1 ]; then
 
-                        echo "No image found in zip file"
+                        print_verbose_info "No image found in zip file"
                         continue
                     fi
 
-                    echo "Checking for partition data in zip..."
+                    print_verbose_info "Checking for partition data in zip..."
 
                     if [ $(7z l -ba -slt "${temp_zip_file_path}" | grep 'Path =' | grep -c "${IMAGE_METADATA_FILENAME}") -ne 1 ]; then
 
-                        echo "No partition data found in zip file"
+                        print_verbose_info "No partition data found in zip file"
                         continue
                     fi
 
@@ -199,9 +247,9 @@ find_image()
 
     if [ ! -f "${ZIP_FILE_PATH}" ]; then
 
-        print_error "No zipped image file was found"
+        print_error "No pi-topOS zip file was found"
 
-        error_return_to_os
+        error
     fi
 }
 
@@ -227,9 +275,10 @@ get_metadata()
         [ -z "${new_os_minimum_loader_version}" ]
     then
 
-        print_error "The required metadata could not be extracted from the discoverred OS image. Is this a valid pi-topOS image?"
+        print_error "Attempted to extract metadata from a discovered OS image, but required metadata could not be extracted"
+        print_error "Is this a valid pi-topOS image?"
 
-        error_return_to_os
+        error
     fi
 
     # We have what we need - store in global variables
@@ -245,33 +294,29 @@ validate_os_compatibility()
 {
     if [ "${LOADER_VERSION}" -lt "${LOADER_MINIMUM_VERSION}" ]; then
 
-        print_error "Current OS upgrader is not capable of installing this OS. Please run a software update on the OS, or contact support@pi-top.com"
+        print_error "This pi-topOS Upgrader cannot install this newer version of pi-topOS."
+        print_error "Please run a software update on the OS, or contact support@pi-top.com"
 
-        error_return_to_os
-
+        error
     fi
 }
 
 flash_partitions_from_image()
 {
-    # Flash sd card from image
-
     local image_filename=$(7z l -ba -slt "${ZIP_FILE_PATH}" | grep 'Path =' | grep '.img' | awk '{ print $3 }')
 
-    echo "Flashing boot partition..."
+    print_verbose_info "Flashing boot partition..."
     7z e -y -so "${ZIP_FILE_PATH}" "${image_filename}" 2>/dev/null | dd bs=512 skip="${BOOT_PARTITION_START_SECTOR}" count="${BOOT_PARTITION_SIZE_SECTORS}" of="${SD_CARD_DEVICE_P5}"
 
     if [ "$?" -ne 0 ]; then
-        print_error "There was an error flashing the boot partition of your SD card. Your OS partitions may no longer boot. If this is the case, please re-flash your SD card using a desktop computer"
-        sh
+        error "There was an error flashing the boot partition of your SD card"
     fi
 
-    echo "Flashing rootfs partition. This may take up to 30 minutes..."
+    print_verbose_info "Flashing rootfs partition..."
     7z e -y -so "${ZIP_FILE_PATH}" "${image_filename}" 2>/dev/null | dd bs=512 skip="${ROOTFS_PARTITION_START_SECTOR}" count="${ROOTFS_PARTITION_SIZE_SECTORS}" of="${SD_CARD_DEVICE_P6}"
 
     if [ "$?" -ne 0 ]; then
-        print_error "There was an error flashing the rootfs partition of your SD card. Your OS partitions may no longer boot. If this is the case, please re-flash your SD card using a desktop computer"
-        sh
+        error "There was an error flashing the rootfs partition of your SD card"
     fi
 }
 
@@ -280,15 +325,13 @@ mount_and_check_new_partitions()
     mount_device "${SD_CARD_DEVICE_P5}" "${SD_CARD_MOUNT_POINT_P5}"
 
     if [ ! -d "${SD_CARD_MOUNT_POINT_P5}" ]; then
-        print_error "The boot partition of your SD card could not be mounted, which suggests a problem during flashing the image. Your OS partitions may no longer boot. If this is the case, please re-flash your SD card using a desktop computer"
-        sh
+        error "The boot partition of your SD card could not be mounted, which suggests a problem during flashing the image."
     fi
 
     mount_device "${SD_CARD_DEVICE_P6}" "${SD_CARD_MOUNT_POINT_P6}"
 
     if [ ! -d "${SD_CARD_MOUNT_POINT_P6}" ]; then
-        print_error "The rootfs partition of your SD card could not be mounted, which suggests a problem during flashing the image. Your OS partitions may no longer boot. If this is the case, please re-flash your SD card using a desktop computer"
-        sh
+        error "The rootfs partition of your SD card could not be mounted, which suggests a problem during flashing the image."
     fi
 }
 
@@ -297,26 +340,26 @@ fix_partuuid_in_cmdline()
     # The partition ID written into the pi-topOS cmdline will be wrong, so it needs
     # to be updated the new ID in the mbr.
 
-    echo "Updating cmdline.txt"
+    print_verbose_info "Updating cmdline.txt"
 
     # Back-up
     cp "${SD_CARD_MOUNT_POINT_P5}/cmdline.txt" "${SD_CARD_MOUNT_POINT_P5}/cmdline.txt.old"
 
     local rootfs_partition_id=$(blkid -o export "${SD_CARD_DEVICE_P6}" | grep PARTUUID | cut -d'=' -f 2)
 
-    echo "New rootfs partition ID: ${rootfs_partition_id}"
+    print_verbose_info "New rootfs partition ID: ${rootfs_partition_id}"
 
     sed -i -E 's/root\=PARTUUID\=[^ ]+/root=PARTUUID='"${rootfs_partition_id}"'/g' "${SD_CARD_MOUNT_POINT_P5}/cmdline.txt"
 
-    echo "New cmdline:"
-    cat "${SD_CARD_MOUNT_POINT_P5}/cmdline.txt"
+    print_verbose_info "New cmdline:"
+    print_verbose_info $(cat "${SD_CARD_MOUNT_POINT_P5}/cmdline.txt")
 }
 
 update_file_system_table()
 {
     # Update the fstab on the newly flashed pi-topOS with the appropriate devices
 
-    echo "Updating fstab"
+    print_verbose_info "Updating fstab"
 
     # Back-up
     cp "${SD_CARD_MOUNT_POINT_P6}/etc/fstab" "${SD_CARD_MOUNT_POINT_P6}/etc/fstab.old"
@@ -331,59 +374,62 @@ update_file_system_table()
 
     sed -i '\|'"${SD_CARD_DEVICE_P1}"'|d' "${SD_CARD_MOUNT_POINT_P6}/etc/fstab"
 
-    mkdir ${SD_CARD_MOUNT_POINT_P6}/mnt/p1 2>/dev/null
-    echo "${SD_CARD_DEVICE_P1}  /mnt/p1  vfat  noauto  0  0" >> "${SD_CARD_MOUNT_POINT_P6}/etc/fstab"
+    mkdir ${SD_CARD_MOUNT_POINT_P6}/mnt/.p1 2>/dev/null
+    echo "${SD_CARD_DEVICE_P1}  /mnt/.p1  vfat  noauto  0  0" >> "${SD_CARD_MOUNT_POINT_P6}/etc/fstab"
 
-    echo "New fstab:"
-    cat "${SD_CARD_MOUNT_POINT_P6}/etc/fstab"
+    print_verbose_info "New fstab:"
+    print_verbose_info $(cat "${SD_CARD_MOUNT_POINT_P6}/etc/fstab")
 }
 
 # Main
 
-print_title "Determine loader version"
+print_title "Configuration"
 
-# Source information about the current upgrader
+# Source configuration information
 
-if [ -e "${SD_CARD_MOUNT_POINT_P1}/${OS_UPGRADE_INFO_FILENAME}" ]; then
+if [ -e "${SD_CARD_MOUNT_POINT_P1}/${OS_UPGRADE_CONF_FILENAME}" ]; then
 
-    . "${SD_CARD_MOUNT_POINT_P1}/${OS_UPGRADE_INFO_FILENAME}"
+    echo "Loading configuration for pi-topOS Upgrader"
+    . "${SD_CARD_MOUNT_POINT_P1}/${OS_UPGRADE_CONF_FILENAME}"
 
 else
 
-    print_error "Unable to find current upgrader information - ${OS_UPGRADE_INFO_FILENAME} is missing. Contact support@pi-top.com"
-
-    error_return_to_os
+    echo "No pi-topOS Upgrader configuration found - using default settings"
 fi
 
-# Check for loader version
-if [ -z "${LOADER_VERSION}" ]; then
 
-    print_error "Unable to determine current upgrader version - LOADER_VERSION is missing. Contact support@pi-top.com"
-
-    error_return_to_os
-fi
-
-print_title "Waiting a few seconds to give external devices a chance to initialise..."
+print_title "Initialising..."
+print_verbose_subtitle "Waiting a few seconds to give external devices a chance to initialise..."
 sleep 20
 
-print_title "Searching external storage devices for image..."
+print_title "Attempting to find pi-topOS zip to install on external storage..."
+print_verbose_subtitle "Searching external storage devices for image..."
 find_image
 
-print_title "Validating and extracting image metadata..."
+print_title "Checking everything is okay..."
+print_verbose_subtitle "Validating and extracting image metadata..."
 get_metadata
 
-print_title "Verifying OS image compatibility..."
+print_verbose_subtitle "Verifying OS image compatibility..."
 validate_os_compatibility
 
-print_title "Flashing OS partitions..."
+print_verbose_info "Creating 'started upgrade attempt' breadcrumb..."
+touch "${SD_CARD_MOUNT_POINT_P1}/${OS_UPGRADE_BREADCRUMB_FILENAME}"
+
+print_title "Upgrading pi-topOS... This may take up to 30 minutes!"
+print_verbose_subtitle "Flashing OS partitions..."
 flash_partitions_from_image
 
-print_title "Mounting SD reflashed partitions..."
+print_title "Configuring new pi-topOS installation..."
+print_verbose_subtitle "Mounting SD reflashed partitions..."
 mount_and_check_new_partitions
 
-print_title "Reconfiguring partition identifiers..."
+print_verbose_subtitle "Reconfiguring partition identifiers..."
 fix_partuuid_in_cmdline
 update_file_system_table
 
-print_title "Restoring standard boot sequence..."
+print_verbose_info "Removing 'started upgrade attempt' breadcrumb..."
+rm "${SD_CARD_MOUNT_POINT_P1}/${OS_UPGRADE_BREADCRUMB_FILENAME}"
+
+print_verbose_subtitle "Restoring standard boot sequence..."
 restore_autoboot_file
