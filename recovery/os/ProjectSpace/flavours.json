@@ -1,0 +1,36 @@
+{
+  "flavours": [
+    {
+      "name": "ProjectSpace - 1",
+      "description": "A Project Space to partition the SD card equally"
+    },
+    {
+      "name": "ProjectSpace - 2",
+      "description": "A Project Space to partition the SD card equally"
+    },
+    {
+      "name": "ProjectSpace - 3",
+      "description": "A Project Space to partition the SD card equally"
+    },
+    {
+      "name": "ProjectSpace - 4",
+      "description": "A Project Space to partition the SD card equally"
+    },
+    {
+      "name": "ProjectSpace - 5",
+      "description": "A Project Space to partition the SD card equally"
+    },
+    {
+      "name": "ProjectSpace - 6",
+      "description": "A Project Space to partition the SD card equally"
+    },
+    {
+      "name": "ProjectSpace - 7",
+      "description": "A Project Space to partition the SD card equally"
+    },
+    {
+      "name": "ProjectSpace - 8",
+      "description": "A Project Space to partition the SD card equally"
+    }
+  ]
+}
