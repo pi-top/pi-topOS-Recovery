@@ -195,9 +195,7 @@ find_image()
 
     if [ "${number_of_storage_devices}" -eq 0 ]; then
 
-        print_error "No external storage devices found"
-
-        error
+        error "No external storage devices found"
     fi
 
     for external_device in $(find /dev/sd[a-z]?*); do
@@ -247,9 +245,7 @@ find_image()
 
     if [ ! -f "${ZIP_FILE_PATH}" ]; then
 
-        print_error "No pi-topOS zip file was found"
-
-        error
+        error "No pi-topOS zip file was found"
     fi
 }
 
@@ -275,10 +271,7 @@ get_metadata()
         [ -z "${new_os_minimum_loader_version}" ]
     then
 
-        print_error "Attempted to extract metadata from a discovered OS image, but required metadata could not be extracted"
-        print_error "Is this a valid pi-topOS image?"
-
-        error
+        error "Attempted to extract metadata from a discovered OS image, but required metadata could not be extracted\nIs this a valid pi-topOS image?"
     fi
 
     # We have what we need - store in global variables
@@ -294,10 +287,7 @@ validate_os_compatibility()
 {
     if [ "${LOADER_VERSION}" -lt "${LOADER_MINIMUM_VERSION}" ]; then
 
-        print_error "This pi-topOS Upgrader cannot install this newer version of pi-topOS."
-        print_error "Please run a software update on the OS, or contact support@pi-top.com"
-
-        error
+        error "This pi-topOS Upgrader cannot install this newer version of pi-topOS.\nPlease run a software update on the OS, or contact support@pi-top.com"
     fi
 }
 
