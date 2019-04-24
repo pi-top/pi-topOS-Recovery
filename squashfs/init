@@ -144,33 +144,9 @@ if read -r -t 5; then
     sh
 else
 
-    echo "Checking /boot for pt-os-upgrader files..."
-
-    # Mount p5 (/boot), copy bootloader files, unmount
-
-    mount_device "${SD_CARD_DEVICE_P5}" "${SD_CARD_MOUNT_POINT_P5}"
-
-    if [ -e "${SD_CARD_MOUNT_POINT_P5}/pt-os-upgrader.conf" ]; then
-        echo "Found pi-topOS Upgrader configuration file - copying"
-        cp "${SD_CARD_MOUNT_POINT_P5}/pt-os-upgrader.conf" "${SD_CARD_MOUNT_POINT_P1}"
-    else
-        echo "No pi-topOS Upgrader configuration file found in ${SD_CARD_MOUNT_POINT_P5}"
-        echo "Using already installed configuration file"
-    fi
-
-    if [ -e "${SD_CARD_MOUNT_POINT_P5}/pt-os-upgrader.sh" ]; then
-        echo "Found pi-topOS Upgrader - copying"
-        cp "${SD_CARD_MOUNT_POINT_P5}/pt-os-upgrader.sh" "${SD_CARD_MOUNT_POINT_P1}"
-    else
-        echo "No pi-topOS Upgrader found in ${SD_CARD_MOUNT_POINT_P5}"
-        echo "Using already installed pi-topOS Upgrader"
-    fi
-
-    unmount_device "${SD_CARD_DEVICE_P5}"
-
     # Start the reflash process with logging
 
-    "${SD_CARD_MOUNT_POINT_P1}/pt-os-upgrader.sh" 2>&1 | tee "${SD_CARD_MOUNT_POINT_P1}/upgrade-log.txt"
+    "/pt-os-upgrader" 2>&1 | tee "${SD_CARD_MOUNT_POINT_P1}/upgrade-log.txt"
 
     print_title "Process finished. Rebooting in thirty seconds (press enter to skip)"
     read -r -t 30

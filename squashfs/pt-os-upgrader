@@ -70,6 +70,13 @@ print_error()
     echo -e "\033[0;31m${1}\033[0m"
 }
 
+shutdown()
+{
+    print_verbose_info "Shutting down..."
+
+    /sbin/poweroff -f
+}
+
 reboot_system()
 {
     print_verbose_info "Rebooting..."
@@ -152,13 +159,14 @@ error()
 {
     echo
     echo
-    print_error "Uh oh! An error has occurred:"
+    print_error "Uh oh! An error has occurred"
+    echo "----------------------------"
+    echo
     print_error "${1}"
     echo
-    echo "If you continue to experience errors, try running pi-topOS Upgrader in debug mode."
+    echo "If you continue to experience errors, try running pi-topOS Upgrader in verbose mode."
     echo "You can do this by connecting your SD card to another computer, and setting 'VERBOSE=1' in pt-os-upgrader.conf."
-    echo "Alternatively, you can contact support@pi-top.com for assistance. If possible, please provide all information provided in debug mode."
-    echo
+    echo "You can also contact support@pi-top.com for assistance. If possible, please run pi-topOS Upgrader in verbose mode, and providing upgrade-log.txt by connecting your SD card to another computer."
 
 
     if [ -e "${SD_CARD_MOUNT_POINT_P1}/${OS_UPGRADE_BREADCRUMB_FILENAME}" ]; then
@@ -173,9 +181,21 @@ please install pi-topOS onto your SD card using another computer."
 
     else
 
-        echo "Press any key to attempt to reboot into pi-topOS, or 'r' to retry."
+        echo "Press 'r' to retry, 's' to shutdown, 'd' to enter developer mode (sh environment), or any other key to attempt to reboot into pi-topOS."
 
         read -r -n1 key_press
+
+        if [ "${key_press}" == "s" ]; then
+
+            shutdown
+        fi
+
+        if [ "${key_press}" == "d" ]; then
+            clear
+            echo "DEVELOPER MODE"
+            echo
+            sh
+        fi
 
         if [ "${key_press}" != "r" ]; then
 
@@ -377,10 +397,12 @@ print_title "Configuration"
 
 # Source configuration information
 
-if [ -e "${SD_CARD_MOUNT_POINT_P1}/${OS_UPGRADE_CONF_FILENAME}" ]; then
+config_file="${SD_CARD_MOUNT_POINT_P1}/${OS_UPGRADE_CONF_FILENAME}"
+if [ -e "${config_file}" ]; then
 
     echo "Loading configuration for pi-topOS Upgrader"
-    . "${SD_CARD_MOUNT_POINT_P1}/${OS_UPGRADE_CONF_FILENAME}"
+    print_verbose_info "$(cat ${config_file})"
+    . "${config_file}"
 
 else
 
