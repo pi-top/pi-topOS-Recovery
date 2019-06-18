@@ -134,7 +134,7 @@ mount_device "${SD_CARD_DEVICE_P1}" "${SD_CARD_MOUNT_POINT_P1}"
 print_title "Starting reflashing in 5s. Press enter to cancel..."
 
 if read -r -t 5; then
-    
+
     # Restore booting into pi-topOS
 
     restore_autoboot_file
