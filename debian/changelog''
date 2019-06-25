@@ -1,4 +1,4 @@
-pt-recovery (1.0.0-2) buster; urgency=medium
+pt-recovery-deb (1.0.0-2) buster; urgency=medium
 
   * Move to Buster
 
