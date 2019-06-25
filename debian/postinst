@@ -160,10 +160,12 @@ recovery_files="bcm2710-rpi-3-b.dtb
  overlays/w1-gpio-pullup.dtbo
  overlays/wittypi.dtbo"
 
+echo "Removing dpkg diversions..."
+
 for recovery_filename in ${recovery_files}; do
     if [ -f "/usr/share/ptrecoveryhack/${recovery_filename}" ]; then
         rm -f "/recovery/${recovery_filename}"
-        dpkg-divert --package ptrecoveryhack --remove --rename "/recovery/${recovery_filename}"
+        dpkg-divert --quiet --package ptrecoveryhack --remove --rename "/recovery/${recovery_filename}"
         sync
     fi  
 done
