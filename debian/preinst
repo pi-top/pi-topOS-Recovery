@@ -164,5 +164,5 @@ recovery_files="bcm2710-rpi-3-b.dtb
  overlays/wittypi.dtbo"
 
 for recovery_filename in ${recovery_files}; do
-    dpkg-divert --package ptrecoveryhack --divert "/usr/share/ptrecoveryhack/${recovery_filename}" "/boot/${recovery_filename}"
+    dpkg-divert --package ptrecoveryhack --divert "/usr/share/ptrecoveryhack/${recovery_filename}" "/recovery/${recovery_filename}"
 done
