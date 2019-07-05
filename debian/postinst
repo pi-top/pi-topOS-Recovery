@@ -167,5 +167,5 @@ for recovery_filename in ${recovery_files}; do
         rm -f "/recovery/${recovery_filename}"
         dpkg-divert --quiet --package ptrecoverydiversion --remove --rename "/recovery/${recovery_filename}"
         sync
-    fi  
+    fi
 done
