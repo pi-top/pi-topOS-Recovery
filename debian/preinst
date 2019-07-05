@@ -1,7 +1,7 @@
 #!/bin/sh
 
-mkdir -p /usr/share/ptrecoveryhack
-mkdir -p /usr/share/ptrecoveryhack/overlays
+mkdir -p /usr/share/ptrecoverydiversion
+mkdir -p /usr/share/ptrecoverydiversion/overlays
 mkdir -p /recovery/overlays
 
 recovery_files="bcm2710-rpi-3-b.dtb
@@ -167,5 +167,5 @@ recovery_files="bcm2710-rpi-3-b.dtb
 echo "Adding dpkg diversions..."
 
 for recovery_filename in ${recovery_files}; do
-    dpkg-divert --quiet --package ptrecoveryhack --divert "/usr/share/ptrecoveryhack/${recovery_filename}" "/recovery/${recovery_filename}"
+    dpkg-divert --quiet --package ptrecoverydiversion --divert "/usr/share/ptrecoverydiversion/${recovery_filename}" "/recovery/${recovery_filename}"
 done
