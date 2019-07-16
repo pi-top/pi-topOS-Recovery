@@ -167,5 +167,5 @@ recovery_files="bcm2710-rpi-3-b.dtb
 echo "Adding dpkg diversions..."
 
 for recovery_filename in ${recovery_files}; do
-    dpkg-divert --quiet --package ptrecoverydiversion --divert "/usr/share/ptrecoverydiversion/${recovery_filename}" "/recovery/${recovery_filename}"
+    dpkg-divert --quiet --package ptrecoverydiversion --rename --divert "/usr/share/ptrecoverydiversion/${recovery_filename}" "/recovery/${recovery_filename}"
 done
