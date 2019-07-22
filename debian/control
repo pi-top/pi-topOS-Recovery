@@ -9,4 +9,4 @@ Homepage: https://pi-top.com/
 Package: pt-recovery
 Architecture: armhf
 Description: pi-topOS recovery partition
- Files relating to pi-topOS recovery partition.
+ Installs files relating to pi-topOS recovery partition.
