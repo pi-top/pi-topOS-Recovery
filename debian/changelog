@@ -1,9 +1,3 @@
-pt-recovery (1.0.2-1) stretch; urgency=medium
-
-  * Fix issue with fstab
-
--- Ben Pring <ben@pi-top.com>  Wed, 07 Aug 2019 10:40:50 +0100
-
 pt-recovery (1.0.1-1) stretch; urgency=medium
 
   * Add dpkg diversion similar to rpikernelhack

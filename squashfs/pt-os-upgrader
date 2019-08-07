@@ -367,18 +367,25 @@ fix_partuuid_in_cmdline()
 
 update_file_system_table()
 {
-    # Update the fstab on the newly flashed pi-topOS with the appropriate partitions
+    # Update the fstab on the newly flashed pi-topOS with the appropriate devices
 
     print_verbose_info "Updating fstab"
 
     # Back-up
     cp "${SD_CARD_MOUNT_POINT_P6}/etc/fstab" "${SD_CARD_MOUNT_POINT_P6}/etc/fstab.old"
 
-    # Replace the drives for /recovery, /boot and the rootfs
+    # Replace the drives for root (/) and boot (/boot)
 
-    sed -i 's|^[^#].* /recovery |'"${SD_CARD_DEVICE_P1}"'  /recovery |' "${SD_CARD_MOUNT_POINT_P6}/etc/fstab"
     sed -i 's|^[^#].* /boot |'"${SD_CARD_DEVICE_P5}"'  /boot |' "${SD_CARD_MOUNT_POINT_P6}/etc/fstab"
     sed -i 's|^[^#].* / |'"${SD_CARD_DEVICE_P6}"'  / |' "${SD_CARD_MOUNT_POINT_P6}/etc/fstab"
+
+    # We also add an entries for p1, which is then mounted readonly to /mnt instead of /media.
+    # This prevents it being seen as a removable drive (and shown on the desktop)
+
+    sed -i '\|'"${SD_CARD_DEVICE_P1}"'|d' "${SD_CARD_MOUNT_POINT_P6}/etc/fstab"
+
+    mkdir ${SD_CARD_MOUNT_POINT_P6}/mnt/.p1 2>/dev/null
+    echo "${SD_CARD_DEVICE_P1}  /mnt/.p1  vfat  noauto  0  0" >> "${SD_CARD_MOUNT_POINT_P6}/etc/fstab"
 
     print_verbose_info "New fstab:"
     print_verbose_info $(cat "${SD_CARD_MOUNT_POINT_P6}/etc/fstab")
