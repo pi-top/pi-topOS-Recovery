@@ -23,7 +23,7 @@ mkdir -p /tmp/squashfs/ 2>/dev/null
 unsquashfs -f -d /tmp/squashfs/ "${recovery_rfs}"
 
 cp "${squashfs_dir}/init" /tmp/squashfs/init
-cp "${squashfs_dir}/pt-os-upgrader" /tmp/squashfs/pt-os-upgrader
+cp "${squashfs_dir}/pt-os-installer" /tmp/squashfs/pt-os-installer
 
 rm "${recovery_rfs}"
 mksquashfs /tmp/squashfs/ "${recovery_rfs}"

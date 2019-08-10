@@ -1,8 +1,8 @@
 #!/bin/sh
 
-#####################
-# pi-topOS Upgrader #
-#####################
+######################
+# pi-topOS Installer #
+######################
 
 # Common constants and functions
 
@@ -17,9 +17,9 @@ export SD_CARD_MOUNT_POINT_P6="/tmp/mmcblk0p6"
 export PT_BOOT_PARTITION_ID="5"
 
 export IMAGE_METADATA_FILENAME="metadata.txt"
-export OS_UPGRADE_CONF_FILENAME="pt-os-upgrader.conf"
+export OS_INSTALL_CONF_FILENAME="pt-os-installer.conf"
 
-export OS_UPGRADE_BREADCRUMB_FILENAME="upgrade-started"
+export OS_INSTALL_BREADCRUMB_FILENAME="install-started"
 
 # Global variables to be detected
 
@@ -31,7 +31,7 @@ LOADER_VERSION=1
 MIN_HUB_FW_VERSION_MAJOR=6
 MIN_HUB_FW_VERSION_MINOR=0
 
-# Can be overridden by OS_UPGRADE_CONF_FILENAME
+# Can be overridden by OS_INSTALL_CONF_FILENAME
 VERBOSE=0
 
 ZIP_FILE_PATH=""
@@ -141,7 +141,7 @@ restore_autoboot_file()
     # Write the autoboot file to the first partition of the SD card. If that
     # partition is not currently mounted, then mount it first. This file tells
     # the bootloader which partition to automatically boot into, so we set
-    # this to 6 which is the boot partition of pi-topOS
+    # this to the boot partition of pi-topOS
 
     print_verbose_info "Restoring autoboot"
 
@@ -164,15 +164,15 @@ error()
     echo
     print_error "${1}"
     echo
-    echo "If you continue to experience errors, try running pi-topOS Upgrader in verbose mode."
-    echo "You can do this by connecting your SD card to another computer, and setting 'VERBOSE=1' in pt-os-upgrader.conf."
-    echo "You can also contact support@pi-top.com for assistance. If possible, please run pi-topOS Upgrader in verbose mode, and providing upgrade-log.txt by connecting your SD card to another computer."
+    echo "If you continue to experience errors, try running pi-topOS Installer in verbose mode."
+    echo "You can do this by connecting your SD card to another computer, and setting 'VERBOSE=1' in pt-os-installer.conf."
+    echo "You can also contact support@pi-top.com for assistance. If possible, please run pi-topOS Installer in verbose mode, and providing install-log.txt by connecting your SD card to another computer."
 
 
-    if [ -e "${SD_CARD_MOUNT_POINT_P1}/${OS_UPGRADE_BREADCRUMB_FILENAME}" ]; then
+    if [ -e "${SD_CARD_MOUNT_POINT_P1}/${OS_INSTALL_BREADCRUMB_FILENAME}" ]; then
 
         print_error "NOTE: potential corrupted OS installation detected - please retry."
-        print_error "If you are unable to install pi-topOS using pi-topOS Upgrader, \
+        print_error "If you are unable to install pi-topOS using pi-topOS Installer, \
 please install pi-topOS onto your SD card using another computer."
 
         echo "Press any key to retry."
@@ -307,7 +307,7 @@ validate_os_compatibility()
 {
     if [ "${LOADER_VERSION}" -lt "${LOADER_MINIMUM_VERSION}" ]; then
 
-        error "This pi-topOS Upgrader cannot install this newer version of pi-topOS.\nPlease run a software update on the OS, or contact support@pi-top.com"
+        error "This pi-topOS Installer cannot install this newer version of pi-topOS.\nPlease run a software update on the OS, or contact support@pi-top.com"
     fi
 }
 
@@ -390,16 +390,16 @@ print_title "Configuration"
 
 # Source configuration information
 
-config_file="${SD_CARD_MOUNT_POINT_P1}/${OS_UPGRADE_CONF_FILENAME}"
+config_file="${SD_CARD_MOUNT_POINT_P1}/${OS_INSTALL_CONF_FILENAME}"
 if [ -e "${config_file}" ]; then
 
-    echo "Loading configuration for pi-topOS Upgrader"
+    echo "Loading configuration for pi-topOS Installer"
     print_verbose_info "$(cat ${config_file})"
     . "${config_file}"
 
 else
 
-    echo "No pi-topOS Upgrader configuration found - using default settings"
+    echo "No pi-topOS Installer configuration found - using default settings"
 fi
 
 
@@ -418,10 +418,10 @@ get_metadata
 print_verbose_subtitle "Verifying OS image compatibility..."
 validate_os_compatibility
 
-print_verbose_info "Creating 'started upgrade attempt' breadcrumb..."
-touch "${SD_CARD_MOUNT_POINT_P1}/${OS_UPGRADE_BREADCRUMB_FILENAME}"
+print_verbose_info "Creating 'started install attempt' breadcrumb..."
+touch "${SD_CARD_MOUNT_POINT_P1}/${OS_INSTALL_BREADCRUMB_FILENAME}"
 
-print_title "Upgrading pi-topOS... This may take up to 30 minutes!"
+print_title "Installing pi-topOS... This may take up to 30 minutes!"
 print_verbose_subtitle "Flashing OS partitions..."
 flash_partitions_from_image
 
@@ -433,8 +433,8 @@ print_verbose_subtitle "Reconfiguring partition identifiers..."
 fix_partuuid_in_cmdline
 update_file_system_table
 
-print_verbose_info "Removing 'started upgrade attempt' breadcrumb..."
-rm "${SD_CARD_MOUNT_POINT_P1}/${OS_UPGRADE_BREADCRUMB_FILENAME}"
+print_verbose_info "Removing 'started install attempt' breadcrumb..."
+rm "${SD_CARD_MOUNT_POINT_P1}/${OS_INSTALL_BREADCRUMB_FILENAME}"
 
 print_verbose_subtitle "Restoring standard boot sequence..."
 restore_autoboot_file

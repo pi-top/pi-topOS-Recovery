@@ -80,7 +80,7 @@ restore_autoboot_file()
     # Write the autoboot file to the first partition of the SD card. If that
     # partition is not currently mounted, then mount it first. This file tells
     # the bootloader which partition to automatically boot into, so we set
-    # this to 6 which is the boot partition of pi-topOS
+    # this to the boot partition of pi-topOS
 
     echo "Restoring autoboot"
 
@@ -146,7 +146,7 @@ else
 
     # Start the reflash process with logging
 
-    "/pt-os-upgrader" 2>&1 | tee "${SD_CARD_MOUNT_POINT_P1}/upgrade-log.txt"
+    "/pt-os-installer" 2>&1 | tee "${SD_CARD_MOUNT_POINT_P1}/install-log.txt"
 
     print_title "Process finished. Rebooting in thirty seconds (press enter to skip)"
     read -r -t 30
