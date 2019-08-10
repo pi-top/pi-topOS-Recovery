@@ -2,8 +2,8 @@
 
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-squashfs_dir="$(dirname ${script_dir})/squashfs"
-recovery_dir="$(dirname ${script_dir})/recovery"
+squashfs_dir="$(dirname "${script_dir}")/squashfs"
+recovery_dir="$(dirname "${script_dir}")/recovery"
 
 recovery_rfs="${recovery_dir}/recovery.rfs"
 
