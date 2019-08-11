@@ -1,3 +1,9 @@
+pt-recovery (1.0.3-1) stretch; urgency=medium
+
+  * "pi-topOS Upgrader" -> "pi-topOS Installer"
+
+-- Mike Roberts <mike@pi-top.com>  Sun, 11 Aug 2019 12:27:37 +0100
+
 pt-recovery (1.0.2-1) stretch; urgency=medium
 
   * Fix issue with fstab
