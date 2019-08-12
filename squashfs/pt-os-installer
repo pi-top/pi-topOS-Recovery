@@ -220,6 +220,8 @@ find_image()
 
     for external_device in $(find /dev/sd[a-z]?*); do
 
+        print_verbose_info "External storage device found - ${external_device}"
+
         local device_name=$(basename "${external_device}")
         local external_device_mount_point="/tmp/dev/${device_name}"
 
@@ -260,6 +262,11 @@ find_image()
 
                 unmount_device "${external_device}"
             fi
+
+        else
+
+            error "Unable to mount ${external_device} to ${external_device_mount_point}"
+
         fi
     done
 
