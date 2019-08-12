@@ -213,6 +213,8 @@ find_image()
 
     local number_of_storage_devices=$(ls -1 /dev/sd* 2>/dev/null | wc -l)
 
+    print_verbose_info "Number of external storage devices found: ${number_of_storage_devices}"
+
     if [ "${number_of_storage_devices}" -eq 0 ]; then
 
         error "No external storage devices found"
