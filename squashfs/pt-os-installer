@@ -213,8 +213,6 @@ find_image()
 
     local number_of_storage_devices=$(ls -1 /dev/sd* 2>/dev/null | wc -l)
 
-    print_verbose_info "Number of external storage devices found: ${number_of_storage_devices}"
-
     if [ "${number_of_storage_devices}" -eq 0 ]; then
 
         error "No external storage devices found"
@@ -222,7 +220,7 @@ find_image()
 
     for external_device in $(find /dev/sd[a-z]?*); do
 
-        print_verbose_info "External storage device found - ${external_device}"
+        echo "External storage device found - ${external_device}"
 
         local device_name=$(basename "${external_device}")
         local external_device_mount_point="/tmp/dev/${device_name}"
@@ -231,19 +229,21 @@ find_image()
 
         if [ -d "${external_device_mount_point}" ]; then
 
-            print_verbose_info "Mounted storage device ${external_device_mount_point}. Checking for zipped image..."
+            print_verbose_info "Mounted storage device ${external_device_mount_point}."
+
+            echo "Checking for pi-topOS zip file..."
 
             for temp_zip_file_path in $(find "${external_device_mount_point}"/ -maxdepth 1 -type f -name '*.zip'); do
 
                 if [ -f "${temp_zip_file_path}" ]; then
 
-                    print_verbose_info "Found zip file on storage device: ${temp_zip_file_path}"
+                    echo "Found zip file on storage device: ${temp_zip_file_path}"
 
-                    print_verbose_info "Checking for image file in zip..."
+                    echo "Checking that zip file contains pi-topOS image..."
 
                     if [ $(7z l -ba -slt "${temp_zip_file_path}" | grep 'Path =' | grep -c '.img') -ne 1 ]; then
 
-                        print_verbose_info "No image found in zip file"
+                        echo "No image found in zip file"
                         continue
                     fi
 
@@ -252,6 +252,7 @@ find_image()
                     if [ $(7z l -ba -slt "${temp_zip_file_path}" | grep 'Path =' | grep -c "${IMAGE_METADATA_FILENAME}") -ne 1 ]; then
 
                         print_verbose_info "No partition data found in zip file"
+                        echo "Zip file is not a valid pi-topOS zip - skipping..."
                         continue
                     fi
 
