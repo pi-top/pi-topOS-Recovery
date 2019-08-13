@@ -166,7 +166,8 @@ error()
     echo
     echo "If you continue to experience errors, try running pi-topOS Installer in verbose mode."
     echo "You can do this by connecting your SD card to another computer, and setting 'VERBOSE=1' in pt-os-installer.conf."
-    echo "You can also contact support@pi-top.com for assistance. If possible, please run pi-topOS Installer in verbose mode, and providing install-log.txt by connecting your SD card to another computer."
+    echo "The issue might be the usb device you are using. If possible change the usb device and try again."
+    echo "If the installer continues to fail please contact support@pi-top.com for assistance. If possible, please run pi-topOS Installer in verbose mode, and providing install-log.txt by connecting your SD card to another computer."
 
 
     if [ -e "${SD_CARD_MOUNT_POINT_P1}/${OS_INSTALL_BREADCRUMB_FILENAME}" ]; then
