@@ -1,3 +1,9 @@
+pt-recovery (1.0.4-1) stretch; urgency=medium
+
+  * Add suggestion to try a different USB device if there's an error
+
+-- choudhry Amjad <choudhry@pi-top.com>  Tue, 13 Aug 2019 14:55:00 +0100
+
 pt-recovery (1.0.3-1) stretch; urgency=medium
 
   * "pi-topOS Upgrader" -> "pi-topOS Installer"
