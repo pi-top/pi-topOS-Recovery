@@ -326,15 +326,18 @@ flash_partitions_from_image()
 {
     local image_filename=$(7z l -ba -slt "${ZIP_FILE_PATH}" | grep 'Path =' | grep '.img' | awk '{ print $3 }')
 
+    local boot_partition_sector_count="$(expr ${BOOT_PARTITION_SIZE_SECTORS} / 256 + 1)"
+    local rootfs_partition_sector_count="$(expr ${ROOTFS_PARTITION_SIZE_SECTORS} / 256 + 1)"
+
     print_verbose_info "Flashing boot partition..."
-    7z e -y -so "${ZIP_FILE_PATH}" "${image_filename}" 2>/dev/null | dd bs=512 skip="${BOOT_PARTITION_START_SECTOR}" count="${BOOT_PARTITION_SIZE_SECTORS}" of="${SD_CARD_DEVICE_P5}"
+    7z e -y -so "${ZIP_FILE_PATH}" "${image_filename}" 2>/dev/null | dd bs=128k skip="${BOOT_PARTITION_START_SECTOR}" count="${boot_partition_sector_count}" of="${SD_CARD_DEVICE_P5}"
 
     if [ "$?" -ne 0 ]; then
         error "There was an error flashing the boot partition of your SD card"
     fi
 
     print_verbose_info "Flashing rootfs partition..."
-    7z e -y -so "${ZIP_FILE_PATH}" "${image_filename}" 2>/dev/null | dd bs=512 skip="${ROOTFS_PARTITION_START_SECTOR}" count="${ROOTFS_PARTITION_SIZE_SECTORS}" of="${SD_CARD_DEVICE_P6}"
+    7z e -y -so "${ZIP_FILE_PATH}" "${image_filename}" 2>/dev/null | dd bs=128k skip="${ROOTFS_PARTITION_START_SECTOR}" count="${rootfs_partition_sector_count}" of="${SD_CARD_DEVICE_P6}"
 
     if [ "$?" -ne 0 ]; then
         error "There was an error flashing the rootfs partition of your SD card"
