@@ -1,3 +1,9 @@
+pt-recovery (1.0.5-1) stretch; urgency=medium
+
+  * Speed up upgrading OS by increasing dd block size
+
+-- choudhry Amjad <choudhry@pi-top.com>  Wed, 04 Sep 2019 16:13:51 +0100
+
 pt-recovery (1.0.4-1) stretch; urgency=medium
 
   * Add suggestion to try a different USB device if there's an error
