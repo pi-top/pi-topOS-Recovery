@@ -1,3 +1,4 @@
 pt-recovery binary: binary-from-other-architecture
 pt-recovery binary: statically-linked-binary
 pt-recovery binary: non-standard-toplevel-dir
+pt-recovery: executable-not-elf-or-script
