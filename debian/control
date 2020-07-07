@@ -3,10 +3,11 @@ Section: utils
 Priority: optional
 Maintainer: pi-top <deb-maintainers@pi-top.com>
 Build-Depends: debhelper (>= 7)
-Standards-Version: 3.8.4
+Standards-Version: 3.9.8
 Homepage: https://pi-top.com/
 
 Package: pt-recovery
 Architecture: armhf
+Depends: ${misc:Depends}
 Description: pi-topOS recovery partition
  Installs files relating to pi-topOS recovery partition.
