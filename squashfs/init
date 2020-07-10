@@ -125,7 +125,7 @@ done)
 
 # Mount p1 for logging, etc
 
-print_title "Mount primary partition and start logging..."
+print_title "Mounting primary partition for logging..."
 
 mount_device "${SD_CARD_DEVICE_P1}" "${SD_CARD_MOUNT_POINT_P1}"
 
@@ -148,7 +148,7 @@ else
 
     "/pt-os-installer" 2>&1 | tee "${SD_CARD_MOUNT_POINT_P1}/install-log.txt"
 
-    print_title "Process finished. Rebooting in thirty seconds (press enter to skip)"
+    print_title "Process finished. Rebooting in 30s (press Enter to skip)"
     read -r -t 30
 fi
 

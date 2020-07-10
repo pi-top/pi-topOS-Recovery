@@ -165,7 +165,7 @@ error()
     print_error "${1}"
     echo
     echo "If you continue to experience errors, try running pi-topOS Installer in verbose mode."
-    echo "You can do this by connecting your SD card to another computer, and setting 'VERBOSE=1' in pt-os-installer.conf."
+    echo "You can do this by connecting your SD card to another computer, and setting 'VERBOSE=1' in ${OS_INSTALL_CONF_FILENAME}."
     echo "If you are sure that a USB storage device is connected with a zip containing pi-topOS on it, there might be a problem with the USB storage device that you are using. If possible, try again with a different USB storage device."
     echo "If the installer continues to fail, please contact support@pi-top.com for assistance. If possible, please run pi-topOS Installer in verbose mode, and providing install-log.txt by connecting your SD card to another computer."
 
