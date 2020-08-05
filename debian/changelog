@@ -1,4 +1,4 @@
-pt-recovery (1.0.5-1) stretch; urgency=medium
+pt-recovery (1.0.6-1) stretch; urgency=medium
 
   * Upgrade package quality
   * Update some strings
