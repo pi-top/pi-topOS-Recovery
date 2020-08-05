@@ -1,5 +1,12 @@
 pt-recovery (1.0.5-1) stretch; urgency=medium
 
+  * Upgrade package quality
+  * Update some strings
+
+ -- Mike Roberts <mike@pi-top.com>  Wed, 05 Aug 2020 17:54:40 +0100
+
+pt-recovery (1.0.5-1) stretch; urgency=medium
+
   * Speed up upgrading OS by increasing dd block size
 
  -- Choudhry Amjad <choudhry@pi-top.com>  Wed, 04 Sep 2019 16:13:51 +0100
