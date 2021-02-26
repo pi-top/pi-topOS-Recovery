@@ -7,7 +7,7 @@ Standards-Version: 3.9.8
 Homepage: https://pi-top.com/
 
 Package: pt-recovery
-Architecture: armhf
+Architecture: all
 Depends: ${misc:Depends}
 Description: pi-topOS recovery partition
  Installs files relating to pi-topOS recovery partition.
