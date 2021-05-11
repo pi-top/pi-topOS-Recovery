@@ -9,6 +9,7 @@ Homepage: https://pi-top.com/
 
 Package: pt-recovery
 Architecture: all
-Depends: ${misc:Depends}
+Depends:
+ ${misc:Depends},
 Description: pi-topOS recovery partition
  Installs files relating to pi-topOS recovery partition.
