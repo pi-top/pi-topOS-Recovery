@@ -1,3 +1,9 @@
+pt-recovery (1.0.7) stretch; urgency=medium
+
+  * Migrate to native package
+
+ -- Jorge Capona <jorge@pi-top.com>  Tue, 11 May 2021 14:52:28 -0400
+
 pt-recovery (1.0.6-1) stretch; urgency=medium
 
   * Upgrade package quality
