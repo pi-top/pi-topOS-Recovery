@@ -1,4 +1,3 @@
-pt-recovery binary: binary-from-other-architecture
 pt-recovery binary: statically-linked-binary
 pt-recovery binary: non-standard-toplevel-dir
 pt-recovery: arch-independent-package-contains-binary-or-object recovery/recovery.elf
