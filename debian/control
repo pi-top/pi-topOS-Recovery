@@ -8,7 +8,7 @@ Standards-Version: 4.5.1
 Homepage: https://pi-top.com/
 
 Package: pt-recovery
-Architecture: all
+Architecture: armhf
 Depends:
  ${misc:Depends},
 Description: pi-topOS recovery partition
