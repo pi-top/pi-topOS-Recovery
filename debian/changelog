@@ -1,3 +1,10 @@
+pt-recovery (1.0.8) stretch; urgency=medium
+
+  * Source now uses recovery.rfs from pinn-lite.zip
+  * debian/rules now modifies the squashfs directly
+
+ -- Jorge Capona <jorge@pi-top.com>  Mon, 14 Jun 2021 14:35:41 +0100
+
 pt-recovery (1.0.7) stretch; urgency=medium
 
   * Migrate to native package

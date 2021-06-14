@@ -6,6 +6,8 @@ mkdir -p /recovery/overlays
 
 recovery_files="bcm2710-rpi-3-b.dtb
  bcm2710-rpi-3-b-plus.dtb
+ bcm2711-rpi-4-b.dtb
+ bcm2711-rpi-400.dtb
  bootcode.bin
  .BUILD-DATA
  recovery7.img
