@@ -9,6 +9,9 @@ Standards-Version: 4.5.1
 Homepage: https://pi-top.com/
 
 Package: pt-recovery
+# Though this package is intended for ARM; it will fail if defined as
+# nothing is compiled as part of this package's build.
+# Therefore, we say that the architecture for this package can be any.
 Architecture: all
 Depends:
  ${misc:Depends},
