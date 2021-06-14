@@ -6,8 +6,21 @@ export TMPDIR := $(shell mktemp -d)
 	dh $@
 
 override_dh_install:
+	# Unpack squashfs
 	unsquashfs -f -d $(TMPDIR) recovery/recovery.rfs
+
+	# Remove default init script from squashfs
+	rm $(TMPDIR)/init
+	# Move new init into squashfs
+	# Move main OS installer script into squashfs
 	cp squashfs/* $(TMPDIR)
+
+	# Repack squashfs
+	rm recovery/recovery.rfs
 	mksquashfs $(TMPDIR) recovery/recovery.rfs
+
+	# Clean up temporary directory
 	rm -rf $(TMPDIR)
+
+	# Proceed with normal Debian packaging install stage
 	dh_install
