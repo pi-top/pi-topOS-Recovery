@@ -7,12 +7,7 @@ export TMPDIR := $(shell mktemp -d)
 
 override_dh_install:
 	unsquashfs -f -d $(TMPDIR) recovery/recovery.rfs
-
-	cp squashfs/init $(TMPDIR)
-	cp squashfs/pt-os-installer $(TMPDIR)
-
+	cp squashfs/* $(TMPDIR)
 	mksquashfs $(TMPDIR) recovery/recovery.rfs
-
 	rm -rf $(TMPDIR)
-
 	dh_install
