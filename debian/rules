@@ -6,7 +6,8 @@ export TMPDIR := $(shell mktemp -d)
 	dh $@
 
 
-# TODO: patch preinst/postinst with list in `recovery/`; revert in clean up
+# TODO: patch preinst/postinst 'recovery_files' with list of files in `recovery/`
+# TODO: revert in clean up
 
 
 override_dh_install:
