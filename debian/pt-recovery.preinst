@@ -1,8 +1,11 @@
-#!/bin/bash -e
-
-mkdir -p /usr/share/ptrecoverydiversion
-mkdir -p /usr/share/ptrecoverydiversion/overlays
-mkdir -p /recovery/overlays
+#!/bin/bash
+###############################################################
+#                Unofficial 'Bash strict mode'                #
+# http://redsymbol.net/articles/unofficial-bash-strict-mode/  #
+###############################################################
+set -euo pipefail
+IFS=$'\n\t'
+###############################################################
 
 recovery_files="bcm2710-rpi-3-b.dtb
  bcm2710-rpi-3-b-plus.dtb
@@ -166,10 +169,16 @@ recovery_files="bcm2710-rpi-3-b.dtb
  overlays/w1-gpio-pullup.dtbo
  overlays/wittypi.dtbo"
 
+mkdir -p /usr/share/ptrecoverydiversion/overlays
+mkdir -p /recovery/overlays
+
 echo "Adding dpkg diversions..."
 
-for recovery_filename in ${recovery_files}; do
-    dpkg-divert --quiet --package ptrecoverydiversion --rename --divert "/usr/share/ptrecoverydiversion/${recovery_filename}" "/recovery/${recovery_filename}"
+for f in ${recovery_files}; do
+    dpkg-divert --quiet --package ptrecoverydiversion --rename \
+        --divert \
+        "/usr/share/ptrecoverydiversion/${f}" \
+        "/recovery/${f}"
 done
 
 #DEBHELPER#

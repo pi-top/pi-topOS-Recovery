@@ -1,4 +1,11 @@
-#!/bin/bash -e
+#!/bin/bash
+###############################################################
+#                Unofficial 'Bash strict mode'                #
+# http://redsymbol.net/articles/unofficial-bash-strict-mode/  #
+###############################################################
+set -euo pipefail
+IFS=$'\n\t'
+###############################################################
 
 recovery_files="bcm2710-rpi-3-b.dtb
  bcm2710-rpi-3-b-plus.dtb
@@ -164,10 +171,12 @@ recovery_files="bcm2710-rpi-3-b.dtb
 
 echo "Removing dpkg diversions..."
 
-for recovery_filename in ${recovery_files}; do
-    if [ -f "/usr/share/ptrecoverydiversion/${recovery_filename}" ]; then
-        rm -f "/recovery/${recovery_filename}"
-        dpkg-divert --quiet --package ptrecoverydiversion --remove --rename "/recovery/${recovery_filename}"
+for f in ${recovery_files}; do
+    if [ -f "/usr/share/ptrecoverydiversion/${f}" ]; then
+        rm -f "/recovery/${f}"
+        dpkg-divert --quiet --package ptrecoverydiversion --rename \
+            --remove \
+            "/recovery/${f}"
         sync
     fi
 done
