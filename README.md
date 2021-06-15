@@ -1,12 +1,16 @@
 # pi-topOS Recovery
 
+> Get back to a fresh install with no need to wipe the microSD card
+
+<!-- GOAL: Get back to a fresh install with no need to wipe the microSD card, download images, or use another computer -->
+
 Based on [PINN](https://github.com/procount/pinn), which itself is based on [NOOBS](https://github.com/raspberrypi/noobs), this is both a recovery operating system and integrated recovery application designed to run on startup. The recovery OS is a minified Linux environment (provided by buildroot). The recovery application is a shell script configured to run on recovery OS startup which can install pi-topOS from a USB memory device (actually anything that shows up in Linux via `/dev/sd*`.
 
 At present, all files in `recovery` are taken from [pinn-lite.zip](http://sourceforge.net/projects/pinn/files/pinn-lite.zip). However, `recovery.rfs` is a special file that contains a squashed file system in it (An [initramfs](https://wiki.debian.org/initramfs) image containing various scripts and the PINN GUI application).
 
 This is modified during packaging to instead provide an out-of-the-box automatic installer of pi-topOS via USB device.
 
-Whilst pi-topOS Recovery will work on any clean FAT formatted SD card, it has been specifically designed to work with pi-topOS SD card images.
+Whilst pi-topOS Recovery will work on any clean FAT formatted SD card, it has been specifically designed to work with pi-topOS SD card images, which come with pi-topOS Recovery pre-installed.
 
 ## USB-based pi-topOS installer
 
