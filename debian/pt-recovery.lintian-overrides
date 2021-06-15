@@ -3,5 +3,8 @@ pt-recovery binary: non-standard-toplevel-dir
 pt-recovery: arch-independent-package-contains-binary-or-object recovery/recovery.elf
 pt-recovery: arch-independent-package-contains-binary-or-object recovery/recover4.elf
 pt-recovery: binary-has-unneeded-section recovery/recovery.elf .comment
+pt-recovery: binary-has-unneeded-section recovery/recover4.elf .comment
 pt-recovery: executable-not-elf-or-script
 pt-recovery: file-in-unusual-dir
+pt-recovery: package-contains-documentation-outside-usr-share-doc recovery/config.txt
+pt-recovery: package-contains-documentation-outside-usr-share-doc recovery/overlays/README
