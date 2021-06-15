@@ -1,5 +1,7 @@
 # pi-topOS Recovery
 
+pi-topOS Recovery is the built-in recovery system of your pi-top device running pi-topOS.
+
 > Get back to a fresh install with no need to wipe the microSD card
 
 <!-- GOAL: Get back to a fresh install with no need to wipe the microSD card, download images, or use another computer -->
