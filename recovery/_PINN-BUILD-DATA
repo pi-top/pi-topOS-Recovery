@@ -1,0 +1,6 @@
+Build-date: 2021-02-16
+PINN Version: v3.5.5
+PINN Git HEAD @ 66cd2facc3d17df0ea4f59bf6b05ccbd01325f42
+rpi-userland Git master @ f73fca015d421b763936667a0b58fe5024d59921
+rpi-firmware Git master @ 2b41f509710d99758a5b8efa88d95dd0e9169c0a
+rpi-linux Git rpi-4.19.y @ f2f7e4b23d8788e96f81a7522b2f703e51c53e70
