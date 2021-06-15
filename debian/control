@@ -7,23 +7,18 @@ Build-Depends:
 # Required for maintainer scripts
  squashfs-tools,
 # Buildroot dependencies
- bash,
  bc,
  binutils,
- build-essential,
  bzip2,
  cpio,
  file,
  gcc (>= 4.8),
  g++ (>= 4.8),
- gzip,
  make (>= 3.81),
  patch,
  perl (>= 5.8.7),
  python,
  rsync,
- sed,
- tar,
  unzip,
  wget,
 Standards-Version: 4.5.1
