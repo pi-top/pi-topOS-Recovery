@@ -6,6 +6,8 @@ At present, all files in `recovery` are taken from [pinn-lite.zip](http://source
 
 This is modified during packaging to instead provide an out-of-the-box automatic installer of pi-topOS via USB device.
 
+Whilst pi-topOS Recovery will work on any clean FAT formatted SD card, it has been specifically designed to work with pi-topOS SD card images.
+
 ## USB-based pi-topOS installer
 
 Inside the `initramfs`, `init` will set up the environment and wait 5 seconds for the user to press Enter to return to their OS's main partition. If no input is detected, then `pt-os-installer` will start.
