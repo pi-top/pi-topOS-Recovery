@@ -1,7 +1,8 @@
 pt-recovery (1.0.8) stretch; urgency=medium
 
-  * Source now uses recovery.rfs from pinn-lite.zip
-  * debian/rules now modifies the squashfs directly
+  * Uses PINN 3.5.5 base buildroot OS
+  * recovery.rfs is now modified as part of package build
+  * Maintainer scripts now use Bash strict mode
 
  -- Jorge Capona <jorge@pi-top.com>  Mon, 14 Jun 2021 14:35:41 +0100
 
