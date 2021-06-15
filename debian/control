@@ -20,6 +20,7 @@ Build-Depends:
  make (>= 3.81),
  patch,
  perl (>= 5.8.7),
+ python,
  rsync,
  sed,
  tar,
