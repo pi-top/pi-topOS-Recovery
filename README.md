@@ -34,3 +34,10 @@ Partition 5 is main partition - partition 1 is mounted as /recovery in the files
 
 `dpkg-divert` is used as FAT is not handled well.
  -->
+
+
+## TODO
+* First pass: `wget https://downloads.sourceforge.net/project/pinn/pinn-lite.zip` to get latest PINN source?
+* Better: Generate [`buildroot`](https://buildroot.org/) embedded Linux dynamically as part of package
+    * This potentially will allow us to modify the kernel to include additional functionality
+    * This would replace the 'hard-coded' `recovery` directory in source
