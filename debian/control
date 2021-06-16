@@ -15,6 +15,7 @@ Build-Depends:
  cpio,
  file,
  gcc (>= 4.8),
+ git,
  g++ (>= 4.8),
  make (>= 3.81),
  patch,

@@ -6,9 +6,9 @@ pi-topOS Recovery is the built-in recovery system of your pi-top device running 
 
 <!-- GOAL: Get back to a fresh install with no need to wipe the microSD card, download images, or use another computer -->
 
-Based on [PINN](https://github.com/procount/pinn), which itself is based on [NOOBS](https://github.com/raspberrypi/noobs), this is both a recovery operating system and integrated recovery application designed to run on startup. The recovery OS is a minified Linux environment (provided by buildroot). The recovery application is a shell script configured to run on recovery OS startup which can install pi-topOS from a USB memory device (actually anything that shows up in Linux via `/dev/sd*`.
+Based on [PINN](https://github.com/procount/pinn)/[NOOBS](https://github.com/raspberrypi/noobs), this is both a recovery operating system and integrated recovery application designed to run on startup. The recovery OS is a minified Linux environment (provided by buildroot). The recovery application is a shell script configured to run on recovery OS startup which can install pi-topOS from a USB memory device (actually anything that shows up in Linux via `/dev/sd*`.
 
-At present, all files in `recovery` are taken from [pinn-lite.zip](http://sourceforge.net/projects/pinn/files/pinn-lite.zip). However, `recovery.rfs` is a special file that contains a squashed file system in it (An [initramfs](https://wiki.debian.org/initramfs) image containing various scripts and the PINN GUI application).
+At present, all files in `recovery` are taken from [NOOBS Lite](https://downloads.raspberrypi.org/NOOBS_lite/images/). However, `recovery.rfs` is a special file that contains a squashed file system in it (An [initramfs](https://wiki.debian.org/initramfs) image containing various scripts and the GUI application).
 
 This is modified during packaging to instead provide an out-of-the-box automatic installer of pi-topOS via USB device.
 
@@ -16,7 +16,7 @@ Whilst pi-topOS Recovery will work on any clean FAT formatted SD card, it has be
 
 ## USB-based pi-topOS installer
 
-Inside the `initramfs`, `init` will set up the environment and wait 5 seconds for the user to press Enter to return to their OS's main partition. If no input is detected, then `pt-os-installer` will start.
+Without an `autoboot.txt` file to redirect to during boot (e.g. containing `boot_partition=5`), `init` inside of the `initramfs` will set up the environment and wait 5 seconds for the user to press Enter to return to their OS's main partition. If no input is detected, then `pt-os-installer` will start.
 
 `pt-os-installer` will wait a few seconds to give external devices a chance to initialise before trying to search for external storage devices. Any that are found will be probed for all zip files. Zip files are checked to see if a `.img` file is found within it, as well as pi-topOS's metadata file that contains the partition data for the image. This is what allows the installer to be able to reinstall the OS.
 
@@ -46,4 +46,4 @@ Partition 5 is main partition - partition 1 is mounted as /recovery in the files
 
 
 ## TODO
-* Replace PINN files (`recovery`) with copied `buildroot` config to build directly
+* Replace Linux files (`recovery`) with copied `buildroot` config to build directly
