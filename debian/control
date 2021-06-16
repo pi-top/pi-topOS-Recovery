@@ -6,7 +6,9 @@ Build-Depends:
  debhelper-compat (= 12),
 # Required for maintainer scripts
  squashfs-tools,
-# Buildroot dependencies
+# Buildroot dependencies (https://buildroot.org/downloads/manual/manual.html#requirement-mandatory)
+#   Required to use `make menuconfig`:
+#     libncurses-dev,
  bc,
  binutils,
  bzip2,
