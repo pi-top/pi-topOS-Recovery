@@ -46,4 +46,4 @@ Partition 5 is main partition - partition 1 is mounted as /recovery in the files
 
 
 ## TODO
-* Replace Linux files (`recovery`) with copied `buildroot` config to build directly
+* Write up how pi-topOS build process completes the setup necessary for this to work
