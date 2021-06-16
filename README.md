@@ -47,3 +47,4 @@ Partition 5 is main partition - partition 1 is mounted as /recovery in the files
 
 ## TODO
 * Write up how pi-topOS build process completes the setup necessary for this to work
+* Fully understand and document `dpkg-divert` steps, and provide maintainer advice
