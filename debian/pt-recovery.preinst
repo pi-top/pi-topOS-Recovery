@@ -283,15 +283,13 @@ recovery_files=(
     "overlays/wm8960-soundcard.dtbo"
 )
 
-mkdir -p /usr/share/ptrecoverydiversion/overlays
+mkdir -p /usr/share/pt-recovery/overlays
 mkdir -p /recovery/overlays
-
-# echo "Adding dpkg diversions..."
 
 for f in "${recovery_files[@]}"; do
     dpkg-divert --rename \
         --package ptrecoverydiversion \
-        --divert "/usr/share/ptrecoverydiversion/${f}" \
+        --divert "/usr/share/pt-recovery/${f}" \
         --add "/recovery/${f}"
 done
 

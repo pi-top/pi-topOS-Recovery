@@ -283,10 +283,8 @@ recovery_files=(
     "overlays/wm8960-soundcard.dtbo"
 )
 
-# echo "Removing dpkg diversions..."
-
 for f in "${recovery_files[@]}"; do
-    if [[ -f "/usr/share/ptrecoverydiversion/${f}" ]]; then
+    if [[ -f "/usr/share/pt-recovery/${f}" ]]; then
         rm -f "/recovery/${f}"
         dpkg-divert --rename \
             --package ptrecoverydiversion \
