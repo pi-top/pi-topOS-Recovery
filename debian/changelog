@@ -1,8 +1,9 @@
-pt-recovery (1.0.8) stretch; urgency=medium
+pt-recovery (1.1.0) stretch; urgency=medium
 
-  * Uses PINN 3.5.5 base buildroot OS
-  * recovery.rfs is now modified as part of package build
+  * Uses NOOBS 3.7 base buildroot OS; support all recent Pi models
+  * 'recovery.rfs' is now modified as part of package build
   * Maintainer scripts now use Bash strict mode
+  * dpkg-divert is now 'loud'
 
  -- Jorge Capona <jorge@pi-top.com>  Mon, 14 Jun 2021 14:35:41 +0100
 
