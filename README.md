@@ -41,7 +41,7 @@ The files in this package make up the files in the first partition on a modern p
 
 Partition 5 is main partition - partition 1 is mounted as /recovery in the filesystem table and `pt-recovery` handles updating the files.
 
-`dpkg-divert` is used as FAT is not handled well. Files being installed to `/recovery` must be owned by root!
+`dpkg-divert` is used as FAT is not handled well.
  -->
 
 

@@ -288,7 +288,7 @@ mkdir -p /recovery/overlays
 
 for f in "${recovery_files[@]}"; do
     dpkg-divert --rename \
-        --package ptrecoverydiversion \
+        --package pt-recovery-diversion \
         --divert "/usr/share/pt-recovery/${f}" \
         --add "/recovery/${f}"
 done
