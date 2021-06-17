@@ -14,12 +14,19 @@ override_dh_install:
 	# Unpack
 	unsquashfs -f -d $(TMPDIR) recovery/recovery.rfs
 
-	# Remove default init script
+	# Replace init script
 	rm $(TMPDIR)/init || true
-	# Move new init
 	cp init $(TMPDIR)
-	# Move main OS installer script
+
+	# Copy over main OS installer script
 	cp pt-os-installer $(TMPDIR)
+
+	# Remove other NOOBS files for smaller FS file
+	# https://github.com/raspberrypi/noobs/blob/master/recovery/mainwindow.cpp
+	rm $(TMPDIR)/usr/bin/recovery || true  		# Actual Qt app
+	rm -rf $(TMPDIR)/keymaps || true   		 		# Qt app's key mappings
+	rm -rf $(TMPDIR)/usr/data || true  				# MainWindow::inputSequence's Pixmap
+	rm -rf $(TMPDIR)/usr/lib/fonts/* || true  # Added system fonts
 
 	# Repack
 	rm recovery/recovery.rfs
