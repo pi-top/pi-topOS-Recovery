@@ -1,7 +1,5 @@
 pt-recovery (1.1.1) stretch; urgency=medium
 
-  [ Mike Roberts ]
-  * Reformat
   * Add 30s timeout before attempting reboot to pi-topOS
 
  -- pi-top <deb-maintainers@pi-top.com>  Mon, 21 Jun 2021 15:47:53 +0000
