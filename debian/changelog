@@ -1,3 +1,9 @@
+pt-recovery (1.1.1) stretch; urgency=medium
+
+  * Add 30s timeout before attempting reboot to pi-topOS
+
+ -- pi-top <deb-maintainers@pi-top.com>  Mon, 21 Jun 2021 15:47:53 +0000
+
 pt-recovery (1.1.0) stretch; urgency=medium
 
   * Uses NOOBS 3.7 base buildroot OS; support all recent Pi models
