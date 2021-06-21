@@ -45,62 +45,52 @@ BOOT_PARTITION_SIZE_SECTORS=""
 ROOTFS_PARTITION_START_SECTOR=""
 ROOTFS_PARTITION_SIZE_SECTORS=""
 
-
-print_title()
-{
+print_title() {
     echo -e "\033[1;33m[ ${1} ]\033[0m"
 }
 
-print_verbose_subtitle()
-{
+print_verbose_subtitle() {
     if [ $VERBOSE -ne 0 ]; then
         echo -e "\033[1;33m[ ${1} ]\033[0m"
     fi
 }
 
-print_verbose_info()
-{
+print_verbose_info() {
     if [ $VERBOSE -ne 0 ]; then
         echo "${1}"
     fi
 }
 
-print_error()
-{
+print_error() {
     echo -e "\033[0;31m${1}\033[0m"
 }
 
-shutdown()
-{
+shutdown() {
     print_verbose_info "Shutting down..."
 
     /sbin/poweroff -f
 }
 
-reboot_system()
-{
+reboot_system() {
     print_verbose_info "Rebooting..."
 
     /sbin/reboot -f
 }
 
-delete_dir()
-{
+delete_dir() {
     # Remove directory
 
     rm -rf "${1}"
 }
 
-create_empty_dir()
-{
+create_empty_dir() {
     # Create a directory - ensure it is available and empty by removing it first
 
     delete_dir "${1}"
     mkdir -p "${1}"
 }
 
-mount_device()
-{
+mount_device() {
     # Mount a device to a new directory and log
 
     print_verbose_info "Mounting ${1} to ${2}..."
@@ -120,8 +110,7 @@ mount_device()
     fi
 }
 
-unmount_device()
-{
+unmount_device() {
     local mount_point=$(findmnt -nr -o target -S "${1}")
 
     if [ -d "${mount_point}" ]; then
@@ -136,8 +125,7 @@ unmount_device()
     fi
 }
 
-restore_autoboot_file()
-{
+restore_autoboot_file() {
     # Write the autoboot file to the first partition of the SD card. If that
     # partition is not currently mounted, then mount it first. This file tells
     # the bootloader which partition to automatically boot into, so we set
@@ -152,11 +140,10 @@ restore_autoboot_file()
         mount_device "${SD_CARD_DEVICE_P1}" "${SD_CARD_MOUNT_POINT_P1}"
     fi
 
-    echo "boot_partition=${PT_BOOT_PARTITION_ID}" > ${SD_CARD_MOUNT_POINT_P1}/autoboot.txt
+    echo "boot_partition=${PT_BOOT_PARTITION_ID}" >${SD_CARD_MOUNT_POINT_P1}/autoboot.txt
 }
 
-error()
-{
+error() {
     echo
     echo
     print_error "Uh oh! An error has occurred"
@@ -168,7 +155,6 @@ error()
     echo "You can do this by connecting your SD card to another computer, and setting 'VERBOSE=1' in ${OS_INSTALL_CONF_FILENAME}."
     echo "If you are sure that a USB storage device is connected with a zip containing pi-topOS on it, there might be a problem with the USB storage device that you are using. If possible, try again with a different USB storage device."
     echo "If the installer continues to fail, please contact support@pi-top.com for assistance. If possible, please run pi-topOS Installer in verbose mode, and providing install-log.txt by connecting your SD card to another computer."
-
 
     if [ -e "${SD_CARD_MOUNT_POINT_P1}/${OS_INSTALL_BREADCRUMB_FILENAME}" ]; then
 
@@ -207,8 +193,7 @@ please install pi-topOS onto your SD card using another computer."
     reboot_system
 }
 
-find_image()
-{
+find_image() {
     # Mount external drives (/dev/sd*) until we find a zip file containing an image. If we
     # find that file, capture its path in a variable and leave the drive mounted
 
@@ -280,8 +265,7 @@ find_image()
     fi
 }
 
-get_metadata()
-{
+get_metadata() {
     # Extract the partition data
 
     7z e -y -o/tmp/ "${ZIP_FILE_PATH}" "${IMAGE_METADATA_FILENAME}" &>/dev/null
@@ -295,12 +279,11 @@ get_metadata()
 
     local new_os_minimum_loader_version=$(cat "${metadata_file}" | grep 'LOADER_MINIMUM_VERSION=' | awk -F '=' '{ print $2 }')
 
-    if [ -z "${boot_start_sector}" ] || \
-        [ -z "${boot_size_sectors}" ] || \
-        [ -z "${rootfs_start_sector}" ] || \
-        [ -z "${rootfs_size_sectors}" ] || \
-        [ -z "${new_os_minimum_loader_version}" ]
-    then
+    if [ -z "${boot_start_sector}" ] ||
+        [ -z "${boot_size_sectors}" ] ||
+        [ -z "${rootfs_start_sector}" ] ||
+        [ -z "${rootfs_size_sectors}" ] ||
+        [ -z "${new_os_minimum_loader_version}" ]; then
 
         error "Attempted to extract metadata from a discovered OS image, but required metadata could not be extracted\nIs this a valid pi-topOS image?"
     fi
@@ -314,16 +297,14 @@ get_metadata()
     LOADER_MINIMUM_VERSION="${new_os_minimum_loader_version}"
 }
 
-validate_os_compatibility()
-{
+validate_os_compatibility() {
     if [ "${LOADER_VERSION}" -lt "${LOADER_MINIMUM_VERSION}" ]; then
 
         error "This pi-topOS Installer cannot install this newer version of pi-topOS.\nPlease run a software update on the OS, or contact support@pi-top.com"
     fi
 }
 
-flash_partitions_from_image()
-{
+flash_partitions_from_image() {
     local image_filename=$(7z l -ba -slt "${ZIP_FILE_PATH}" | grep 'Path =' | grep '.img' | awk '{ print $3 }')
 
     local boot_partition_sector_count="$(expr ${BOOT_PARTITION_SIZE_SECTORS} / 256 + 1)"
@@ -344,8 +325,7 @@ flash_partitions_from_image()
     fi
 }
 
-mount_and_check_new_partitions()
-{
+mount_and_check_new_partitions() {
     mount_device "${SD_CARD_DEVICE_P5}" "${SD_CARD_MOUNT_POINT_P5}"
 
     if [ ! -d "${SD_CARD_MOUNT_POINT_P5}" ]; then
@@ -359,8 +339,7 @@ mount_and_check_new_partitions()
     fi
 }
 
-fix_partuuid_in_cmdline()
-{
+fix_partuuid_in_cmdline() {
     # The partition ID written into the pi-topOS cmdline will be wrong, so it needs
     # to be updated the new ID in the mbr.
 
@@ -379,8 +358,7 @@ fix_partuuid_in_cmdline()
     print_verbose_info $(cat "${SD_CARD_MOUNT_POINT_P5}/cmdline.txt")
 }
 
-update_file_system_table()
-{
+update_file_system_table() {
     # Update the fstab on the newly flashed pi-topOS with the appropriate partitions
 
     print_verbose_info "Updating fstab"
@@ -415,7 +393,6 @@ else
 
     echo "No pi-topOS Installer configuration found - using default settings"
 fi
-
 
 print_title "Initialising..."
 print_verbose_subtitle "Waiting a few seconds to give external devices a chance to initialise..."
