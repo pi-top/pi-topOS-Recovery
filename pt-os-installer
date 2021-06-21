@@ -170,7 +170,7 @@ please install pi-topOS onto your SD card using another computer."
 
         echo "Press 'r' to retry, 's' to shutdown, 'd' to enter developer mode (sh environment), or any other key to attempt to reboot into pi-topOS."
 
-        read -r -n1 key_press
+        read -r -t 30 -n1 key_press
 
         if [ "${key_press}" == "s" ]; then
 
