@@ -21,8 +21,8 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: "none"
-          name: "Version Not Yet Set"
+          tag_name: "vX.Y.Z"
+          name: "vX.Y.Z"
           draft: true
           prerelease: false
           files: recovery.zip
