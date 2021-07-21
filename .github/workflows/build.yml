@@ -9,13 +9,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2.2.0
 
-      - name: Build Debian package
+      - name: Build and extract recovery.zip
         run: |
           DOCKER_BUILDKIT=1 docker build --target export . --output tmp --no-cache
           mv tmp/recovery.zip .
           rm -rf tmp
 
-      - name: Upload Debian binary packages
+      - name: Upload recovery.zip
         uses: actions/upload-artifact@v2
         with:
           path: recovery.zip
