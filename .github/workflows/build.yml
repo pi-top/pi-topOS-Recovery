@@ -18,4 +18,5 @@ jobs:
       - name: Upload recovery.zip
         uses: actions/upload-artifact@v2
         with:
+          name: recovery.zip
           path: recovery.zip
