@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  build:
+  draft-release:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout code
