@@ -1,6 +1,0 @@
-#select hdmi
-dtoverlay=pimhyp3:checkonly
-dtoverlay=pimhyp4:checkonly
-ignore_lcd=0
-display_default_lcd=0
-#Add any additional config options for HDMI hee

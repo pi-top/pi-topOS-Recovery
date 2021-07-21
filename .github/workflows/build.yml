@@ -1,0 +1,22 @@
+name: Build
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2.2.0
+
+      - name: Build and extract recovery.zip
+        run: |
+          DOCKER_BUILDKIT=1 docker build --target export . --output tmp --no-cache
+          mv tmp/recovery.zip .
+          rm -rf tmp
+
+      - name: Upload recovery.zip
+        uses: actions/upload-artifact@v2
+        with:
+          name: "pi-topOS Recovery"
+          path: recovery.zip
