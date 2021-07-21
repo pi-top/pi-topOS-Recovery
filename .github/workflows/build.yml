@@ -18,5 +18,5 @@ jobs:
       - name: Upload recovery.zip
         uses: actions/upload-artifact@v2
         with:
-          name: recovery
+          name: "pi-topOS Recovery"
           path: recovery.zip
