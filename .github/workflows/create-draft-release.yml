@@ -21,8 +21,8 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: "v${{ env.VERSION }}"
-          name: "v${{ env.VERSION }}"
+          tag_name: "none"
+          name: "Version Not Yet Set"
           draft: true
           prerelease: false
           files: recovery.zip
