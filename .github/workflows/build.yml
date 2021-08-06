@@ -14,9 +14,11 @@ jobs:
           DOCKER_BUILDKIT=1 docker build --target export . --output tmp --no-cache
           mv tmp/recovery.zip .
           rm -rf tmp
+          unzip recovery.zip
+          rm recovery.zip
 
-      - name: Upload recovery.zip
+      - name: Upload recovery.zip contents
         uses: actions/upload-artifact@v2
         with:
-          name: "pi-topOS Recovery"
-          path: recovery.zip
+          name: recovery
+          path: "*"

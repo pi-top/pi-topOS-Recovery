@@ -16,16 +16,18 @@ jobs:
           workflow_conclusion: success
           branch: master
           event: push
-          name: "pi-topOS Recovery"
+          name: recovery
           path: .
 
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: "vX.Y.Z"
-          name: "vX.Y.Z"
-          draft: true
-          prerelease: false
-          files: recovery.zip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: ls -lR
+
+      # - name: Create Release
+      #   uses: softprops/action-gh-release@v1
+      #   with:
+      #     tag_name: "vX.Y.Z"
+      #     name: "vX.Y.Z"
+      #     draft: true
+      #     prerelease: false
+      #     files: recovery.zip
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
