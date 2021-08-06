@@ -11,9 +11,13 @@ jobs:
 
       - name: Build and extract recovery.zip
         run: |
+          mkdir ${{ github.workspace }}/recovery-os
+          cd ${{ github.workspace }}/recovery-os
           DOCKER_BUILDKIT=1 docker build --target export . --output tmp --no-cache
-          mv tmp/recovery.zip .
-          rm -rf tmp
+          mv ${{ github.workspace }}/recovery-os/tmp/recovery.zip ${{ github.workspace }}/recovery-os
+          cd ${{ github.workspace }}
+          rm -rf ${{ github.workspace }}/recovery-os/tmp
+          cd ${{ github.workspace }}/recovery-os
           unzip recovery.zip
           rm recovery.zip
 
@@ -21,4 +25,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: recovery
-          path: "*"
+          path: ${{ github.workspace }}/recovery-os
