@@ -11,16 +11,12 @@ jobs:
 
       - name: Build and extract recovery.zip
         run: |
-          mkdir -p ${{ github.workspace }}/recovery-os/tmp
-          DOCKER_BUILDKIT=1 docker build --target export . --output ${{ github.workspace }}/recovery-os/tmp --no-cache
-          mv ${{ github.workspace }}/recovery-os/tmp/recovery.zip ${{ github.workspace }}/recovery-os
-          rm -rf ${{ github.workspace }}/recovery-os/tmp
-          cd ${{ github.workspace }}/recovery-os
-          unzip recovery.zip
-          rm recovery.zip
+          DOCKER_BUILDKIT=1 docker build --target export . --output tmp --no-cache
+          mv tmp/recovery.zip .
+          rm -rf tmp
 
-      - name: Upload recovery.zip contents
+      - name: Upload recovery.zip
         uses: actions/upload-artifact@v2
         with:
-          name: recovery
-          path: ${{ github.workspace }}/recovery-os
+          name: "pi-topOS Recovery"
+          path: recovery.zip
