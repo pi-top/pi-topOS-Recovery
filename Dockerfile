@@ -28,9 +28,9 @@ RUN rm -rf ./usr/bin/recovery ./keymaps ./usr/data ./usr/lib/fonts/*
 # Repack
 RUN rm /workspace/recovery.rfs && mksquashfs . /workspace/recovery.rfs
 
-WORKDIR /
+WORKDIR /workspace
 
 # Clean up temporary directory
 RUN rm -rf /tmp/squashfs-workspace
 
-RUN zip -r recovery.zip /workspace
+RUN zip -r recovery.zip .
