@@ -11,11 +11,9 @@ jobs:
 
       - name: Build and extract recovery.zip
         run: |
-          mkdir ${{ github.workspace }}/recovery-os
-          cd ${{ github.workspace }}/recovery-os
-          DOCKER_BUILDKIT=1 docker build --target export . --output tmp --no-cache
+          mkdir ${{ github.workspace }}/recovery-os/tmp
+          DOCKER_BUILDKIT=1 docker build --target export . --output ${{ github.workspace }}/recovery-os/tmp --no-cache
           mv ${{ github.workspace }}/recovery-os/tmp/recovery.zip ${{ github.workspace }}/recovery-os
-          cd ${{ github.workspace }}
           rm -rf ${{ github.workspace }}/recovery-os/tmp
           cd ${{ github.workspace }}/recovery-os
           unzip recovery.zip
