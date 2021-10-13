@@ -16,14 +16,16 @@ RUN unsquashfs -f -d . /workspace/recovery.rfs
 # Overwrite init script and add main OS installer script
 RUN mv /recovery/* .
 
+# Remove NOOBS app
+RUN rm -rf ./usr/bin/recovery
+
 # Remove other NOOBS files for smaller FS file
-# https://github.com/raspberrypi/noobs/blob/master/noobs/mainwindow.cpp
+# https://github.com/raspberrypi/noobs/blob/master/recovery/mainwindow.cpp
 # Files:
-#   * Actual Qt app
 #   * Qt app's key mappings
 #   * MainWindow::inputSequence's Pixmap
 #   * Added system fonts
-RUN rm -rf ./usr/bin/recovery ./keymaps ./usr/data ./usr/lib/fonts/*
+RUN rm -rf ./keymaps ./usr/data ./usr/lib/fonts/*
 
 # Repack
 RUN rm /workspace/recovery.rfs && mksquashfs . /workspace/recovery.rfs
