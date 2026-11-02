@@ -12,10 +12,10 @@ on:
 
 jobs:
   draft-release:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Download artifact
-        uses: dawidd6/action-download-artifact@v2
+        uses: dawidd6/action-download-artifact@v6
         with:
           workflow: build.yml
           workflow_conclusion: success
@@ -25,7 +25,7 @@ jobs:
           path: .
 
       - name: Create Release
-        uses: softprops/action-gh-release@v0.1.7
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.event.inputs.version }}
           name: ${{ github.event.inputs.version }}
