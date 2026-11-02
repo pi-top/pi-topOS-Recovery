@@ -4,10 +4,10 @@ on: push
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2.2.0
+        uses: actions/checkout@v4
 
       - name: Build and extract recovery.zip
         run: |
@@ -16,7 +16,7 @@ jobs:
           rm -rf tmp
 
       - name: Upload recovery.zip
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: "pi-topOS Recovery"
           path: recovery.zip
